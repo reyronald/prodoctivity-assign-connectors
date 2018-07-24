@@ -2,11 +2,14 @@
   "dependencies": {
     "antd": "latest",
     "fuzzaldrin-plus": "0.6.0",
+    "immutability-helper": "2.7.1",
     "react": "latest",
+    "react-dnd": "5.0.0",
+    "react-dnd-html5-backend": "5.0.1",
     "react-dom": "latest"
   },
-  "name": "0xp0n6rj80",
-  "description": null,
+  "name": "prodoctivity-assign-connectors",
+  "description": "",
   "version": "0.0.0",
   "devDependencies": {
     "react-scripts": "1.0.0"
@@ -16,5 +19,6 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
-  }
+  },
+  "keywords": []
 }
