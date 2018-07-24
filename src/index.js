@@ -8,9 +8,12 @@ import AssignConnectors from "./AssignConnectors";
 
 const data = [
   { key: 1, name: "Social Security Database" },
-  { key: 2, name: "Connector X" },
-  { key: 3, name: "Connector Y" },
-  { key: 4, name: "Connector Z" }
+  { key: 2, name: "Customers" },
+  { key: 3, name: "People" },
+  { key: 4, name: "Dependants" },
+  { key: 5, name: "Cities" },
+  { key: 6, name: "Plans" },
+  { key: 7, name: "Nationalities" }
 ];
 
 ReactDOM.render(

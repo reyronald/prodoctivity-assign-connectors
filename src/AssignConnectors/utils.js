@@ -1,6 +1,8 @@
 // @flow
+import * as React from "react";
+import { match } from "fuzzaldrin-plus";
 
-export function splitMatches(
+function splitMatches(
   text: string,
   matches: number[]
 ): Array<{|
@@ -21,5 +23,35 @@ export function splitMatches(
       result.push({ str: text[i], isMatch });
     }
   }
+  return result;
+}
+
+export function highlightMathces(text: string, query: string): React.Node {
+  if (!query) {
+    return text;
+  }
+
+  const matches = match(text, query);
+  const splitMatchesResult = splitMatches(text, matches);
+  const result = splitMatchesResult.reduce((prev, curr) => {
+    return (
+      <React.Fragment>
+        {prev}
+        {curr.isMatch ? (
+          <mark
+            style={{
+              padding: 0,
+              fontWeight: 600,
+              backgroundColor: "transparent"
+            }}
+          >
+            {curr.str}
+          </mark>
+        ) : (
+          curr.str
+        )}
+      </React.Fragment>
+    );
+  }, "");
   return result;
 }

@@ -1,22 +1,19 @@
 // @flow
 import * as React from "react";
 import { Table, Checkbox, Icon, Divider, Radio, Input } from "antd";
-import { filter, match } from "fuzzaldrin-plus";
+import { filter } from "fuzzaldrin-plus";
 import update from "immutability-helper";
 import { DragDropContext } from "react-dnd";
 import HTML5Backend from "react-dnd-html5-backend";
 import DragableBodyRow from "./DragableBodyRow";
-import { splitMatches } from "./utils";
+import { highlightMathces } from "./utils";
 
 const checkboxAndRadioStyle = { display: "block", marginLeft: 0 };
 
-type FilterValue = "SELECTED" | "UNSELECTED" | "ALL" | null | undefined;
-
-class AssignConnectors extends React.Component<
+class AssignConnectors extends React.PureComponent<
   { completeDataSource: {}[], onDataSourceChanged: (dataSource: {}[]) => void },
   { searchText: string, dataSource: {}[], filteredDataSource: ?({}[]) }
 > {
-  // TODO test sCU
   state = {
     searchText: "",
     dataSource: this.props.completeDataSource,
@@ -37,7 +34,7 @@ class AssignConnectors extends React.Component<
         { text: "Unselected", value: "UNSELECTED" },
         { text: "All", value: "ALL" }
       ],
-      onFilter(value: FilterValue, record) {
+      onFilter(value: "SELECTED" | "UNSELECTED" | "ALL", record) {
         if (value === "SELECTED") {
           return record.selected;
         }
@@ -46,35 +43,7 @@ class AssignConnectors extends React.Component<
         }
         return true;
       },
-      render: text => {
-        if (!this.state.searchText) {
-          return text;
-        }
-
-        const matches = match(text, this.state.searchText);
-        const splitMatchesResult = splitMatches(text, matches);
-        const result = splitMatchesResult.reduce((prev, curr) => {
-          return (
-            <React.Fragment>
-              {prev}
-              {curr.isMatch ? (
-                <mark
-                  style={{
-                    padding: 0,
-                    fontWeight: 600,
-                    backgroundColor: "transparent"
-                  }}
-                >
-                  {curr.str}
-                </mark>
-              ) : (
-                curr.str
-              )}
-            </React.Fragment>
-          );
-        }, "");
-        return result;
-      }
+      render: text => highlightMathces(text, this.state.searchText)
     }
   ];
 
@@ -148,18 +117,13 @@ class AssignConnectors extends React.Component<
 
   rowSelection = {
     onChange: (selectedRowKeys, selectedRows) => {
-      console.log(
-        `selectedRowKeys: ${selectedRowKeys}`,
-        "selectedRows: ",
-        selectedRows
-      );
+      //
     },
     onSelect: (record, selected, selectedRows) => {
       record.selected = selected;
-      console.log(record, selected, selectedRows);
     },
     onSelectAll: (selected, selectedRows, changeRows) => {
-      console.log(selected, selectedRows, changeRows);
+      //
     }
   };
 
