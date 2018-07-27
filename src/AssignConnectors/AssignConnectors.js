@@ -10,6 +10,12 @@ import { highlightMathces } from "./utils";
 
 const checkboxAndRadioStyle = { display: "block", marginLeft: 0 };
 
+const MyDivider = () => (
+  <div>
+    <Divider type="vertical" style={{ height: "90%", top: "5%" }} />
+  </div>
+);
+
 class AssignConnectors extends React.PureComponent<
   { completeDataSource: {}[], onDataSourceChanged: (dataSource: {}[]) => void },
   { searchText: string, dataSource: {}[], filteredDataSource: ?({}[]) }
@@ -129,46 +135,59 @@ class AssignConnectors extends React.PureComponent<
 
   expandedRowRender = record => {
     return (
-      <div style={{ display: "flex" }}>
+      <div
+        style={{
+          display: "flex",
+          flexWrap: "wrap",
+          justifyContent: "space-around"
+        }}
+      >
+        <div>
+          <div>
+            <Icon type="key" /> Identification
+          </div>
+          <div>
+            <Icon type="key" /> Identification2
+          </div>
+        </div>
+
+        <MyDivider />
+
         <Checkbox.Group>
-          <Checkbox style={checkboxAndRadioStyle}>
-            Id <Icon type="key" />
-          </Checkbox>
           <Checkbox style={checkboxAndRadioStyle}>First Name</Checkbox>
           <Checkbox style={checkboxAndRadioStyle}>Last Name</Checkbox>
           <Checkbox style={checkboxAndRadioStyle}>Address</Checkbox>
           <Checkbox style={checkboxAndRadioStyle}>Civil Status</Checkbox>
         </Checkbox.Group>
 
-        <div>
-          <Divider type="vertical" style={{ height: "90%", top: "5%" }} />
-        </div>
+        <MyDivider />
 
         <div>
-          <strong>Data found</strong>
-          <div>
-            <Radio.Group defaultValue={true}>
-              <Radio style={checkboxAndRadioStyle} value={true}>
-                Disable
-              </Radio>
-              <Radio style={checkboxAndRadioStyle} value={false}>
-                Enable
-              </Radio>
-            </Radio.Group>
+          <div style={{ marginBottom: "1rem" }}>
+            <strong>Data found</strong>
+            <div>
+              <Radio.Group defaultValue={true}>
+                <Radio style={checkboxAndRadioStyle} value={true}>
+                  Disable
+                </Radio>
+                <Radio style={checkboxAndRadioStyle} value={false}>
+                  Enable
+                </Radio>
+              </Radio.Group>
+            </div>
           </div>
-        </div>
-
-        <div>
-          <strong>No data found</strong>
           <div>
-            <Radio.Group defaultValue={true}>
-              <Radio style={checkboxAndRadioStyle} value={true}>
-                Allow complete
-              </Radio>
-              <Radio style={checkboxAndRadioStyle} value={false}>
-                Do not allow complete
-              </Radio>
-            </Radio.Group>
+            <strong>No data found</strong>
+            <div>
+              <Radio.Group defaultValue={true}>
+                <Radio style={checkboxAndRadioStyle} value={true}>
+                  Allow complete
+                </Radio>
+                <Radio style={checkboxAndRadioStyle} value={false}>
+                  Do not allow complete
+                </Radio>
+              </Radio.Group>
+            </div>
           </div>
         </div>
 
