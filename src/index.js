@@ -23,10 +23,9 @@ ReactDOM.render(
         <li>
           Rows are sortable by drag and dropping.{" "}
           <small>
-            NOTE: This might work unexpectedly in CodeSandbox due to conflicting
-            drag-and-drop backends from the site and our component itself. If
-            you run into any of these issues, either refresh the Preview pane of
-            run the repository locally.
+            NOTE: If you get a "Cannot have two HTML5 backends at the same
+            time." error while using it in CodeSandbox, refresh the Preview
+            pane. This will not happen when the repository is running locally.
           </small>
         </li>
 

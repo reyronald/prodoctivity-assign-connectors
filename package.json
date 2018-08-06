@@ -7,16 +7,16 @@
     "url": "http://www.github.com/reyronald"
   },
   "dependencies": {
-    "antd": "latest",
+    "antd": "^3.8.0",
     "emotion": "9.2.6",
     "fuzzaldrin-plus": "0.6.0",
     "highlight-matches-utils": "1.0.0",
     "immutability-helper": "2.7.1",
     "noop2": "2.0.0",
-    "react": "latest",
+    "react": "^16.4.2",
     "react-dnd": "5.0.0",
     "react-dnd-html5-backend": "5.0.1",
-    "react-dom": "latest",
+    "react-dom": "^16.4.2",
     "react-emotion": "9.2.6"
   },
   "version": "0.0.0",
