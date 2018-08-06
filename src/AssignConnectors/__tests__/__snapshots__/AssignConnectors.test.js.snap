@@ -1,0 +1,26 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AssignConnectors fuzzy search should work 1`] = `
+<td
+  class="ant-table-column-has-filters"
+>
+  <mark
+    style="padding: 0px; font-weight: 600; background-color: transparent;"
+  >
+    S
+  </mark>
+  ocial 
+  <mark
+    style="padding: 0px; font-weight: 600; background-color: transparent;"
+  >
+    S
+  </mark>
+  ecurity 
+  <mark
+    style="padding: 0px; font-weight: 600; background-color: transparent;"
+  >
+    D
+  </mark>
+  atabase
+</td>
+`;

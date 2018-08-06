@@ -4,17 +4,7 @@ import { Icon } from "antd";
 import "antd/dist/antd.css";
 import "./index.css";
 
-import AssignConnectors from "./AssignConnectors";
-
-const data = [
-  { key: 1, name: "Social Security Database" },
-  { key: 2, name: "Customers" },
-  { key: 3, name: "People" },
-  { key: 4, name: "Dependants" },
-  { key: 5, name: "Cities" },
-  { key: 6, name: "Plans" },
-  { key: 7, name: "Nationalities" }
-];
+import App from "./App";
 
 ReactDOM.render(
   <main
@@ -29,7 +19,15 @@ ReactDOM.render(
     <h1>Connectors</h1>
 
     <ul>
-      <li>Rows are sortable by drag and dropping.</li>
+      <li>
+        Rows are sortable by drag and dropping.{" "}
+        <small>
+          NOTE: This might work unexpectedly in CodeSandbox due to conflicting
+          drag-and-drop backends from the site and our component itself. If you
+          run into any of these issues, either refresh the Preview pane of run
+          the repository locally.
+        </small>
+      </li>
 
       <li>
         <span style={{ textDecoration: "line-through" }}>
@@ -56,10 +54,7 @@ ReactDOM.render(
       </li>
     </ul>
 
-    <AssignConnectors
-      completeDataSource={data}
-      onDataSourceChanged={console.log}
-    />
+    <App />
 
     <footer>
       Ronald Rey <br />

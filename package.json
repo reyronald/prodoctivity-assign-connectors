@@ -1,15 +1,24 @@
 {
+  "name": "prodoctivity-assign-connectors",
+  "description": "",
+  "author": {
+    "name": "Ronald Rey",
+    "email": "reyronald@gmail.com",
+    "url": "http://www.github.com/reyronald"
+  },
   "dependencies": {
     "antd": "latest",
+    "emotion": "9.2.6",
     "fuzzaldrin-plus": "0.6.0",
+    "highlight-matches-utils": "1.0.0",
     "immutability-helper": "2.7.1",
+    "noop2": "2.0.0",
     "react": "latest",
     "react-dnd": "5.0.0",
     "react-dnd-html5-backend": "5.0.1",
-    "react-dom": "latest"
+    "react-dom": "latest",
+    "react-emotion": "9.2.6"
   },
-  "name": "prodoctivity-assign-connectors",
-  "description": "",
   "version": "0.0.0",
   "devDependencies": {
     "react-scripts": "1.0.0"

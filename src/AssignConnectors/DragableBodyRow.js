@@ -1,6 +1,7 @@
 // @flow
 import * as React from "react";
 import { DragSource, DropTarget } from "react-dnd";
+import { css } from "react-emotion";
 
 function dragDirection(
   dragIndex,
@@ -8,7 +9,7 @@ function dragDirection(
   initialClientOffset,
   clientOffset,
   sourceClientOffset
-): "downard" | "upward" | undefined {
+): "downward" | "upward" | void {
   const hoverMiddleY = (initialClientOffset.y - sourceClientOffset.y) / 2;
   const hoverClientY = clientOffset.y - sourceClientOffset.y;
   if (dragIndex < hoverIndex && hoverClientY > hoverMiddleY) {
@@ -18,6 +19,18 @@ function dragDirection(
     return "upward";
   }
 }
+
+const downward = css`
+  td {
+    border-bottom: 2px dashed #1890ff !important;
+  }
+`;
+
+const upward = css`
+  td {
+    border-top: 2px dashed #1890ff;
+  }
+`;
 
 class BodyRow extends React.Component {
   render() {
@@ -44,13 +57,12 @@ class BodyRow extends React.Component {
         sourceClientOffset
       );
       if (direction === "downward") {
-        className += " drop-over-downward";
+        className += " " + downward;
       }
       if (direction === "upward") {
-        className += " drop-over-upward";
+        className += " " + upward;
       }
     }
-
     return connectDragSource(
       connectDropTarget(
         <tr {...restProps} className={className} style={style} />
@@ -78,9 +90,7 @@ const rowTarget = {
     }
 
     // Time to actually perform the action
-    // We're dividing by two because we have an expandable hidden row,
-    // which will account for every odd index
-    props.moveRow(dragIndex / 2, hoverIndex / 2);
+    props.moveRow(dragIndex, hoverIndex);
 
     // Note: we're mutating the monitor item here!
     // Generally it's better to avoid mutations,

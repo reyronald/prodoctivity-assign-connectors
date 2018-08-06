@@ -1,57 +1,58 @@
 // @flow
-import * as React from "react";
-import { match } from "fuzzaldrin-plus";
 
-function splitMatches(
-  text: string,
-  matches: number[]
-): Array<{|
-  str: string,
-  isMatch: boolean
-|}> {
-  const result = [];
-  for (let i = 0; i < text.length; i += 1) {
-    const isMatch = i === matches[0];
-    if (isMatch) {
-      matches.shift();
+import type { WebServiceConnector, FormConnector } from "../_lib/types";
+import type { ConnectorToAssign } from "./AssignConnectors";
+
+export function mergeConnectorsAndFormConnectors(
+  connectors: Array<WebServiceConnector>,
+  formConnectors: Array<FormConnector> = []
+): Array<ConnectorToAssign> {
+  const _formConnectors = formConnectors.slice(0);
+  const connectorsToAssign = connectors.map(connector => {
+    const formConnector = pluck(
+      _formConnectors,
+      fc => fc.name === connector.name
+    );
+
+    if (!formConnector) {
+      return {
+        key: connector.name,
+        name: connector.name,
+        output: [],
+        shouldDisableOnData: true,
+        shouldDisableOnNoData: false,
+        noDataMessage: ""
+      };
     }
 
-    const lastIndex = result.length - 1;
-    if (lastIndex !== -1 && result[lastIndex].isMatch === isMatch) {
-      result[lastIndex].str += text[i];
-    } else {
-      result.push({ str: text[i], isMatch });
-    }
-  }
-  return result;
+    return {
+      selected: true,
+      key: formConnector.name,
+      name: formConnector.name,
+      output: formConnector.output.filter(o =>
+        connector.outputMapping.some(om => om.dataElement.name === o.name)
+      ),
+      shouldDisableOnData:
+        formConnector.shouldDisableOnData == null
+          ? true
+          : formConnector.shouldDisableOnData,
+      shouldDisableOnNoData:
+        formConnector.shouldDisableOnNoData == null
+          ? false
+          : formConnector.shouldDisableOnNoData,
+      noDataMessage: formConnector.noDataMessage || ""
+    };
+  });
+
+  return connectorsToAssign;
 }
 
-export function highlightMathces(text: string, query: string): React.Node {
-  if (!query) {
-    return text;
+function pluck<T>(
+  array: T[],
+  predicate: (value: T, index: number, obj: T[]) => boolean
+): ?T {
+  const index = array.findIndex(predicate);
+  if (index > -1) {
+    return array.splice(index, 1)[0];
   }
-
-  const matches = match(text, query);
-  const splitMatchesResult = splitMatches(text, matches);
-  const result = splitMatchesResult.reduce((prev, curr) => {
-    return (
-      <React.Fragment>
-        {prev}
-        {curr.isMatch ? (
-          <mark
-            style={{
-              padding: 0,
-              fontWeight: 600,
-              backgroundColor: "transparent"
-            }}
-          >
-            {curr.str}
-          </mark>
-        ) : (
-          curr.str
-        )}
-      </React.Fragment>
-    );
-  }, "");
-  return result;
 }
