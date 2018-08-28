@@ -9,7 +9,6 @@
   "dependencies": {
     "antd": "^3.8.0",
     "emotion": "9.2.6",
-    "fuzzaldrin-plus": "0.6.0",
     "highlight-matches-utils": "1.0.0",
     "immutability-helper": "2.7.1",
     "noop2": "2.0.0",
@@ -21,13 +20,15 @@
   },
   "version": "0.0.0",
   "devDependencies": {
+    "flow-bin": "^0.79.1",
     "react-scripts": "1.0.0"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "flow": "flow"
   },
   "keywords": []
 }

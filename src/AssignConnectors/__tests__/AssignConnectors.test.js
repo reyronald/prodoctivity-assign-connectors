@@ -120,9 +120,6 @@ describe("AssignConnectors", () => {
     Simulate.click(allMenuItem);
     Simulate.click(mountNode.querySelector(".confirm"));
     expect(mountNode.querySelectorAll("tr td:nth-of-type(3)")).toHaveLength(3);
-
-    // TODO get the instance of the component and call onFilter directly
-    // to assert what happens when the value is unrecognized (Should throw Error)
   });
 
   it("fuzzy search should work", () => {
@@ -142,6 +139,10 @@ describe("AssignConnectors", () => {
     expect(searchedConnector).toBe("Social Security Database");
     expect(tableCells).toHaveLength(1);
     expect(tableCell).toMatchSnapshot();
+
+    search.value = "";
+    Simulate.change(search);
+    expect(mountNode.querySelectorAll("tr td:nth-of-type(3)")).toHaveLength(3);
   });
 
   it("should call onChange with updated data when UI is interacted with", () => {
@@ -250,20 +251,119 @@ describe("AssignConnectors", () => {
     Simulate.click(mountNode.querySelector(".ant-table-row-expand-icon"));
   });
 
-  it("dnd", () => {
+  it("rows drag-n-drop mechanics should work as expected", () => {
     const onChange = jest.fn();
     const mountNode = document.createElement("div");
-    const data = getData();
+    // `react-dnd` adds event listeners to the `window` object. If we don't
+    // attach our `mountNode` to the body of the document then their listeners
+    // won't get called
+    // https://github.com/react-dnd/react-dnd/issues/556
+    document.body.appendChild(mountNode);
     render(
-      <AssignConnectors connectors={[data[0], data[1]]} onChange={onChange} />,
+      <AssignConnectors connectors={getData()} onChange={onChange} />,
       mountNode
     );
+
+    const getTableCells = () =>
+      Array.from(mountNode.querySelectorAll("tr td:nth-of-type(3)"));
+
+    expect(getTableCells().map(cell => cell.textContent)).toEqual([
+      "Social Security Database",
+      "Customers",
+      "People"
+    ]);
+
+    const createBubbledEvent = (type, props = {}) => {
+      const event = new Event(type, { bubbles: true });
+      Object.assign(event, props);
+      return event;
+    };
+
+    // Act & Assert 0: Drag-n-drop but don't move or change anything
+    const tableCells0 = getTableCells();
+    const startingNode0 = tableCells0[0];
+    const endingNode0 = tableCells0[0];
+    startingNode0.dispatchEvent(
+      createBubbledEvent("dragstart", { clientX: 0, clientY: 0 })
+    );
+    endingNode0.dispatchEvent(
+      createBubbledEvent("drop", { clientX: 0, clientY: 0 })
+    );
+    expect(getTableCells().map(cell => cell.textContent)).toEqual([
+      "Social Security Database",
+      "Customers",
+      "People"
+    ]);
+
+    // Act & Assert 1: Drag-n-drop downward from first row to last row (third)
+    const tableCells = getTableCells();
+    const startingNode = tableCells[0];
+    const endingNode = tableCells[2];
+    startingNode.dispatchEvent(
+      createBubbledEvent("dragstart", { clientX: 0, clientY: 0 })
+    );
+
+    endingNode.dispatchEvent(
+      createBubbledEvent("dragover", { clientX: 0, clientY: 1 })
+    );
+    expect(
+      Array.from(endingNode.closest("tr").classList).some(c =>
+        c.endsWith("-downward")
+      )
+    ).toBeTruthy();
+
+    endingNode.dispatchEvent(
+      createBubbledEvent("drop", { clientX: 0, clientY: 1 })
+    );
+    expect(getTableCells().map(cell => cell.textContent)).toEqual([
+      "Customers",
+      "People",
+      "Social Security Database"
+    ]);
+
+    // Act & Assert 2: Drag-n-drop upward from last row (third) to second row
+    const tableCells2 = getTableCells();
+    const startingNode2 = tableCells2[2];
+    const endingNode2 = tableCells2[1];
+
+    startingNode2.closest("tr").getBoundingClientRect = () => ({
+      top: 20,
+      left: 0
+    });
+    startingNode2.dispatchEvent(
+      createBubbledEvent("dragstart", { clientX: 0, clientY: 20 })
+    );
+
+    endingNode2.dispatchEvent(
+      createBubbledEvent("dragover", { clientX: 0, clientY: 10 })
+    );
+    expect(
+      Array.from(endingNode2.closest("tr").classList).some(c =>
+        c.endsWith("-upward")
+      )
+    ).toBeTruthy();
+
+    endingNode2.dispatchEvent(
+      createBubbledEvent("drop", { clientX: 0, clientY: 10 })
+    );
+    expect(getTableCells().map(cell => cell.textContent)).toEqual([
+      "Customers",
+      "Social Security Database",
+      "People"
+    ]);
   });
 
-  // TODO...
-  // https://github.com/atlassian/react-beautiful-dnd/blob/master/test/unit/integration/hooks-integration.spec.js
-  // mousedown -> mousemove -> mouseup
-  //
+  it("should throw error with invalid filter enum value", () => {
+    const instance = new AssignConnectors.DecoratedComponent({
+      onChange: noop,
+      onChangeConnectorsToAssign: noop,
+      connectors: []
+    });
+
+    expect(() =>
+      instance.columns[0].onFilter("INVALID_FILTER_ENUM_VALUE")
+    ).toThrowError(/^Unrecognized filter value: INVALID_FILTER_ENUM_VALUE$/);
+  });
 });
 
 function getData() {

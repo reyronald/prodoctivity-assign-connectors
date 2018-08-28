@@ -13,7 +13,7 @@ import Divider from "antd/lib/divider";
 import Checkbox from "antd/lib/checkbox";
 import Radio from "antd/lib/radio";
 import { css } from "react-emotion";
-import DragableBodyRow from "./DragableBodyRow";
+import DraggableBodyRow from "./DraggableBodyRow";
 import { mergeConnectorsAndFormConnectors } from "./utils";
 import type { WebServiceConnector, FormConnector } from "../_lib/types";
 
@@ -168,7 +168,7 @@ class AssignConnectors extends React.PureComponent<P, S> {
 
   components = {
     body: {
-      row: DragableBodyRow
+      row: DraggableBodyRow
     },
     header: {
       cell: this.getHeaderCell
@@ -177,7 +177,6 @@ class AssignConnectors extends React.PureComponent<P, S> {
 
   moveRow = (dragIndex: number, hoverIndex: number) => {
     this.setState(prevState => {
-      // TODO dont use immutability helper here
       const { connectors, connectorsToAssign } = update(prevState, {
         connectors: {
           $splice: [
@@ -375,8 +374,3 @@ class AssignConnectors extends React.PureComponent<P, S> {
 }
 
 export default DragDropContext(HTML5Backend)(AssignConnectors);
-
-// TODO: Move inline functions to component instance
-// TODO: Test drag-n-drop
-// TODO: Profile performance
-// TODO: Split in expandableRow in a separate component ?
